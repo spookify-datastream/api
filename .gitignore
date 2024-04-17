@@ -43,8 +43,6 @@ artifacts/
 **/*.[Oo]bj/
 **/*.[Bb]in/
 **/*.[Cc]ache/
-**/*.[Cc]sproj
-**/*.[Vv]bproj
 **/*.nupkg
 **/*.nuget.targets
 **/*.nuget.props
