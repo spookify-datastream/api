@@ -52,9 +52,9 @@ VALUES
     (15, 24);
 
 
-SELECT * FROM Songs;
-SELECT * FROM Stats;
+--SELECT * FROM Songs;
+--SELECT * FROM Stats;
 
 
-Drop table Songs;
-Drop table Stats;
+--Drop table Songs;
+--Drop table Stats;

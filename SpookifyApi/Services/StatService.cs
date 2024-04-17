@@ -1,5 +1,6 @@
 using SpookifyApi.Models;
 using SpookifyApi.Repositories;
+using System.ComponentModel.DataAnnotations;
 
 namespace SpookifyApi.Services;
 
@@ -11,14 +12,27 @@ public class StatService
     {
         _statRepository = statRepository;
     }
-    
+
+    // Check if statModel is valid
+    private void ValidateSongModel(StatModel statModel, string errorString)
+    {
+        var validationContext = new ValidationContext(songModel);
+        var validationResults = new List<ValidationResult>();
+        if (!Validator.TryValidateObject(statModel, validationContext, validationResults, true))
+        {
+            throw new ValidationException(errorString, validationResults);
+        }
+    }
+
     public async Task<int> Add(StatModel statModel)
     {
+        ValidateSongModel(statModel, "Validation failed when trying to add stat.");
         return await _statRepository.Add(statModel);
     }
     
     public async Task<bool> Update(StatModel statModel)
     {
+        ValidateSongModel(statModel, "Validation failed when trying to update stat.");
         return await _statRepository.Update(statModel);
     }
     

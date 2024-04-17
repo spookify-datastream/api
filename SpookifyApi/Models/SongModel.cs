@@ -16,5 +16,15 @@ public class SongModel
     public string Album { get; set; }
     [Required]
     [StringLength(150)]
+    /*
+    * Regex matching:
+    * - lowercase and uppercase English letters
+    * - numbers
+    * - '_' I know you dont like this Tase, but we need it =)
+    * - '-'
+    * - must end in '.mp3'
+    * This can be modified
+   */
+    [RegularExpression(@"^[a-zA-Z\d\-]+\.mp3$")]
     public string Filename { get; set; }
 }
