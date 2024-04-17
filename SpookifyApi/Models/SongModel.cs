@@ -27,4 +27,7 @@ public class SongModel
    */
     [RegularExpression(@"^[a-zA-Z\d\-]+\.mp3$")]
     public string Filename { get; set; }
+
+    // Name - will be displayed in the app
+    // Filename - the actual name of the file that will be uploaded from one's computer
 }
