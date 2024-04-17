@@ -27,13 +27,15 @@ public class SongsController : ControllerBase
     {
         var result = await _songService.Add(songModelInput.ToSongModel());
         //if the song was added successfully, add a stat entry for it
-        if (result < 0) return BadRequest();
+        if (result == 0) return BadRequest();
+
         var statModel = new StatModel
         {
             SongID = result,
             Streams = 0
         };
         result = await _statService.Add(statModel); //todo rollback :)
+
         return result > 0 ? Ok() : BadRequest();
     }
     

@@ -29,7 +29,12 @@ public class StatRepository : IStatRepository
         try
         {
             var result = await command.ExecuteNonQueryAsync();
-            return result > 0 ? (int) command.ExecuteScalar() : 0;
+            if (result == 1)
+            {
+                command.CommandText = "SELECT IDENT_CURRENT('stats')";
+                return Convert.ToInt32(await command.ExecuteScalarAsync());
+            }
+            return 0;
         }
         catch (SqlException e)
         {

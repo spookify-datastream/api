@@ -22,6 +22,8 @@ builder.Services.Configure<FileSettings>(builder.Configuration.GetSection("FileS
 
 var app = builder.Build();
 
+Console.WriteLine("Hello World");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

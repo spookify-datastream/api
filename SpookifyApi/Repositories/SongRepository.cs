@@ -26,13 +26,22 @@ public class SongRepository : ISongRepository
         command.Parameters.AddWithValue("artist", songModel.Artist);
         command.Parameters.AddWithValue("album", songModel.Album);
         command.Parameters.AddWithValue("filename", songModel.Filename);
-
         try
         {
             var result = await command.ExecuteNonQueryAsync();
-            return result > 0 ? (int) command.ExecuteScalar() : 0;
+            if(result == 1)
+            {
+                command.CommandText = "SELECT IDENT_CURRENT('Songs')";
+                return Convert.ToInt32(await command.ExecuteScalarAsync());
+            }
+            return 0;
         }
         catch (SqlException e)
+        {
+            Console.WriteLine(e);
+            return 0;
+        }
+        catch (Exception e)
         {
             Console.WriteLine(e);
             return 0;
