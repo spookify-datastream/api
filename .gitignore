@@ -1,0 +1,113 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/projectSettingsUpdater.xml
+/contentModel.xml
+/.idea.SpookifyApi.iml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+.DS_Store
+.idea
+bin
+
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Mono auto generated files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/[Oo]bj/
+**/[Bb]in/
+**/*.[Oo]bj/
+**/*.[Bb]in/
+**/*.[Cc]ache/
+**/*.[Cc]sproj
+**/*.[Vv]bproj
+**/*.nupkg
+**/*.nuget.targets
+**/*.nuget.props
+**/*.log
+**/*.suo
+**/*.user
+**/*.userosscache
+**/*.sln.docstates
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# .NET Core Sdk 2.2+ global tool shim directory
+.dotnet/tools/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# OSX
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Node.js
+node_modules/
+npm-debug.log
+
+# Visual Studio 2022
+.backup/
+.vs/
+*.opendb
+*.tmp_proj
+
+# MonoDevelop
+*.userprefs
+
+# Build Results of Visual Studio
+[Bb]uild[Ll]og.*
+
+# .NET Core
+**/project.lock.json
+**/.vs
+**/.efcache
+**/bin/
+**/obj/
+*.nuget.props
+*.nuget.targets
+
+# .NET tooling
+packet-files/
+
+# Tooling
+_resharper.caches/
+*.DotSettings.user
+
+*.mp3
+
+appsettings.Development.json
+appsettings.json
+
