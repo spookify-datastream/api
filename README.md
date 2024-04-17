@@ -11,4 +11,6 @@ create appsettings.Development.json with (appsettings.json if launched with prod
 
 TODO: 
 - transactions on queries for rollback
-- data validation
+
+DONE: 
+- service data validation
