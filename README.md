@@ -10,5 +10,8 @@ create appsettings.Development.json with (appsettings.json if launched with prod
 - open with swagger for endpoints
 - make sure to select 'http' not 'https'
 
-TODO: 
-- transactions on queries for rollback
+-connection url for windows sql login : 
+    "DefaultConnection": "Server=<yourServerName>\\SQLEXPRESS;Database=<YourDatabaseName>;Trusted_Connection=True;TrustServerCertificate=True"
+    How to find server name: 
+        - open microsoft sql
+        - run 'Select @@SERVERNAME'
