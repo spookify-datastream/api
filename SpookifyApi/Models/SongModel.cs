@@ -25,7 +25,7 @@ public class SongModel
     * - must end in '.mp3'
     * This can be modified
    */
-    [RegularExpression(@"^[a-zA-Z\d\-]+\.mp3$")]
+    [RegularExpression(@"^[a-zA-Z\d\-_]+\.mp3$")]
     public string Filename { get; set; }
 
     // Name - will be displayed in the app

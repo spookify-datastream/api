@@ -1,3 +1,4 @@
+
 CREATE TABLE Songs (
                        SongID INT PRIMARY KEY IDENTITY,
                        Name VARCHAR(150),
