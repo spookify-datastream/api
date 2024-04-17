@@ -8,9 +8,7 @@ create appsettings.Development.json with (appsettings.json if launched with prod
 2. AudioFilesAbsPath = absolute path to the folder containing the audio files in local pc
 
 - open with swagger for endpoints
+- make sure to select 'http' not 'https'
 
 TODO: 
 - transactions on queries for rollback
-
-DONE: 
-- service data validation

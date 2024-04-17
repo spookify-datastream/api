@@ -16,11 +16,11 @@ public class StatService
     // Check if statModel is valid
     private void ValidateSongModel(StatModel statModel, string errorString)
     {
-        var validationContext = new ValidationContext(songModel);
+        var validationContext = new ValidationContext(statModel);
         var validationResults = new List<ValidationResult>();
         if (!Validator.TryValidateObject(statModel, validationContext, validationResults, true))
         {
-            throw new ValidationException(errorString, validationResults);
+            throw new ValidationException(errorString + '-' + validationResults);
         }
     }
 

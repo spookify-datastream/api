@@ -24,7 +24,7 @@ public class SongService
         var validationResults = new List<ValidationResult>();
         if (!Validator.TryValidateObject(songModel, validationContext, validationResults, true))
         {
-            throw new ValidationException(errorString, validationResults);
+            throw new ValidationException(errorString + '-' + validationResults);
         }
     }
 
