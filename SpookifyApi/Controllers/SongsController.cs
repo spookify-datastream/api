@@ -8,7 +8,6 @@ using SpookifyApi.Services;
 
 namespace SpookifyApi.Controllers;
 
-
 [ApiController]
 [Route("[controller]")]
 public class SongsController : ControllerBase
@@ -25,54 +24,86 @@ public class SongsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Add(SongInputModel songModelInput)
     {
-        var result = await _songService.Add(songModelInput.ToSongModel());
-        //if the song was added successfully, add a stat entry for it
-        if (result == 0) return BadRequest();
-
-        var statModel = new StatModel
+        try
         {
-            SongID = result,
-            Streams = 0
-        };
-        result = await _statService.Add(statModel); //todo rollback :)
-
-        return result > 0 ? Ok() : BadRequest();
+            var result = await _songService.Add(songModelInput.ToSongModel());
+            //if the song was added successfully, add a stat entry for it
+            if (result == 0) return BadRequest("Failed to add song.");
+            result = await _statService.Add(new StatModel
+            {
+                SongID = result,
+                Streams = 0
+            }); //todo rollback :)
+            return result > 0 ? Ok() : BadRequest();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
-    
+
     [HttpPut]
     public async Task<IActionResult> Update(SongModel songModel)
     {
-        var result = await _songService.Update(songModel);
-        return result ? Ok() : BadRequest();
+        try
+        {
+            var result = await _songService.Update(songModel);
+            return result ? Ok() : BadRequest();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
-    
+
     [HttpDelete("{songId}")]
     public async Task<IActionResult> Delete(int songId)
     {
-        //first delete the associated stat, then the song
-        var result = await _statService.DeleteBySongId(songId);
-        if (!result) return BadRequest();
-        result = await _songService.Delete(songId); //todo rollback 2
-        return result ? Ok() : BadRequest();
+        try
+        {
+            //first delete the associated stat, then the song
+            var result = await _statService.DeleteBySongId(songId);
+            if (!result) return BadRequest();
+            result = await _songService.Delete(songId); //todo rollback 2
+            return result ? Ok() : BadRequest();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
-    
-    [HttpGet("{songId}")] 
+
+    [HttpGet("{songId}")]
     public async Task<IActionResult> Get(int songId)
     {
-        var song = await _songService.Get(songId);
-        // append the streams to the song object
-        var streams = await _statService.GetStreams(songId); 
-        var response = new { song, streams }; //streams appended to this endpoint
-        return song != null ? Ok(response) : NotFound();
+        try
+        {
+            var song = await _songService.Get(songId);
+            // append the streams to the song object
+            var streams = await _statService.GetStreams(songId);
+            var response = new { song, streams }; //streams appended to this endpoint
+            return song != null ? Ok(response) : NotFound();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
-    
+
     [HttpGet]
-    public async Task<IActionResult> Get() 
+    public async Task<IActionResult> Get()
     {
-        var songs = await _songService.Get(); //no streams here
-        return songs != null ? Ok(songs) : NotFound();
+        try
+        {
+            var songs = await _songService.Get();
+            return songs != null ? Ok(songs) : NotFound();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
-    
+
     [HttpGet("{id}/file")]
     public async Task<IActionResult> DownloadSongFile(int id)
     {
@@ -83,22 +114,30 @@ public class SongsController : ControllerBase
         var filePath = await _songService.GetFilePath(id);
         if (!System.IO.File.Exists(filePath)) return NotFound("File not found.");
 
-        var memoryStream = new MemoryStream();
-        await using (var stream = new FileStream(filePath, FileMode.Open))
+        try
         {
-            await stream.CopyToAsync(memoryStream);
+            var memoryStream = new MemoryStream();
+            await using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memoryStream);
+            }
+
+            memoryStream.Position = 0;
+
+            await _statService.IncrementStreams(id);
+
+            //get content type, not sure why this is needed
+            var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filePath, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            return File(memoryStream, contentType, song.Filename);
         }
-        memoryStream.Position = 0;
-        
-        await _statService.IncrementStreams(id);
-        
-        //get content type, not sure why this is needed
-        var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
-        if (!provider.TryGetContentType(filePath, out var contentType))
+        catch (Exception e)
         {
-            contentType = "application/octet-stream";
+            return BadRequest("Failed processing file.");
         }
-        return File(memoryStream, contentType, song.Filename);
     }
-    
 }
