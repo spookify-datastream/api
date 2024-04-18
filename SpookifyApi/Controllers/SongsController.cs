@@ -81,8 +81,16 @@ public class SongsController : ControllerBase
             var song = await _songService.Get(songId);
             // append the streams to the song object
             var streams = await _statService.GetStreams(songId);
-            var response = new { song, streams }; //streams appended to this endpoint
-            return song != null ? Ok(response) : NotFound();
+            var response = new
+            {
+                song.SongID,
+                song.Name,
+                song.Artist,
+                song.Album,
+                song.Filename,
+                streams
+            }; //streams appended to this endpoint
+            return Ok(response);
         }
         catch (Exception e)
         {
@@ -93,6 +101,32 @@ public class SongsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
+        try
+        {
+            var songList = await _songService.Get();
+            // append the streams to the song object
+            var response = new List<object>();
+            foreach (var song in songList) //not ideal but anyway
+            {
+                var streams = await _statService.GetStreams(song.SongID);
+                response.Add(new
+                {
+                    song.SongID,
+                    song.Name,
+                    song.Artist,
+                    song.Album,
+                    song.Filename,
+                    streams
+                });
+            }
+
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+
         try
         {
             var songs = await _songService.Get();
